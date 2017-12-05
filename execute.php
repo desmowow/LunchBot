@@ -40,9 +40,9 @@ $random = rand(0,(count($lunchplace)-1));
 
 
 foreach($keyWordfirst as $word1){
-  if(strpos($testo, $word1) !== false){
+  if(strpos($text, $word1) !== false){
 	  foreach($keyWordsecond as $word2){
-		  if(strpos($testo, $word2) !== false){
+		  if(strpos($text, $word2) !== false){
 				header("Content-Type: application/json");
 				$parameters = array('chat_id' => $chatId, "text" => $lunchplace[$random]);
 				$parameters["method"] = "sendMessage";
