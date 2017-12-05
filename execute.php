@@ -20,8 +20,8 @@ $text = trim($text);
 $text = strtolower($text);
 
 
-$keyWordfirst = array("dove","andiamo","cosa");
-$keyWordsecond = array("mangiamo","mangiare","mangia");
+$keyWordfirst = array("dove","andiamo","cosa","si");
+$keyWordsecond = array("mangiamo","mangiare","mangia","mangio");
 $lunchplace = array(
   "Giga Vigliacca",
   "Piadina",
