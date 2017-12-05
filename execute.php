@@ -1,7 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 $content = file_get_contents("php://input");
 $update = json_decode($content, true);
 
@@ -42,7 +39,7 @@ $lunchPlace = [
 
 
 if(CheckKeyWord($firstArrayKeyWord, $text) && CheckKeyWord($secondArrayKeyWord, $text)){
-	$place = Place->GetRandomPlace($lunchPlace);
+	$place = Place::GetRandomPlace($lunchPlace);
 	PrintJsonMessage($place->Name, $chatId);
 }
 
@@ -62,7 +59,7 @@ function PrintJsonMessage($message, $chatId){
 	echo json_encode($parameters);
 }
 
-public class Place{
+class Place{
 	public $Name;
 	public $Monday;
 	public $Tuesday;
@@ -106,7 +103,7 @@ public class Place{
 			if($tryNumber < $maxRetryNumber){
 				return GetRandomPlace($places, ($tryNumber+1));
 			}else{
-				return new Place{"Uffaaaa",true,true,true,true,true,true,true);
+				return new Place("Uffaaaa",true,true,true,true,true,true,true);
 			}
 		}
 	}
