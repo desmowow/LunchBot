@@ -1,47 +1,65 @@
 <?php
-$content = file_get_contents("php://input");
-$update = json_decode($content, true);
+try{
 
-if(!$update)
-{
-  exit;
-}
+	$content = file_get_contents("php://input");
+	$update = json_decode($content, true);
 
-$message = isset($update['message']) ? $update['message'] : "";
-$messageId = isset($message['message_id']) ? $message['message_id'] : "";
-$chatId = isset($message['chat']['id']) ? $message['chat']['id'] : "";
-$firstname = isset($message['chat']['first_name']) ? $message['chat']['first_name'] : "";
-$lastname = isset($message['chat']['last_name']) ? $message['chat']['last_name'] : "";
-$username = isset($message['chat']['username']) ? $message['chat']['username'] : "";
-$date = isset($message['date']) ? $message['date'] : "";
-$text = isset($message['text']) ? $message['text'] : "";
-
-$text = trim($text);
-$text = strtolower($text);
-
-$firstArrayKeyWord = ["dove","andiamo","cosa","si"];
-$secondArrayKeyWord = ["mangiamo","mangiare","mangia","mangio"];
-$lunchPlace = Place::FromJSON(file_get_contents("lunchPlaces.json"));
-
-if(CheckKeyWord(["set place:"], $text)){
-	$placeName = substr($text, 10);
-	$placeName = trim($placeName);
-	if($placeName!=""){
-		$lunchPlace[] = new Place($placeName, true, true, true, true, true, true, true);
-		$json = json_encode($lunchPlace);
-		file_put_contents("lunchPlaces.json",$json);
-		PrintJsonMessage("New place:'".$placeName."' saved", $chatId);
-	}else{
-		PrintJsonMessage("Place name missed", $chatId);
+	if(!$update)
+	{
+	  exit;
 	}
-}elseif(CheckKeyWord(["get places"], $text)){
-	$message = "";
-	foreach($lunchPlace as $k=>$p){ $message .= "[".$k."] ".$p->Name." \n"; }
-	PrintJsonMessage($message, $chatId);
-}elseif(CheckKeyWord($firstArrayKeyWord, $text) && CheckKeyWord($secondArrayKeyWord, $text)){
-	$place = Place::GetRandomPlace($lunchPlace);
-	PrintJsonMessage($place->Name, $chatId);
+
+	$message = isset($update['message']) ? $update['message'] : "";
+	$messageId = isset($message['message_id']) ? $message['message_id'] : "";
+	$chatId = isset($message['chat']['id']) ? $message['chat']['id'] : "";
+	$firstname = isset($message['chat']['first_name']) ? $message['chat']['first_name'] : "";
+	$lastname = isset($message['chat']['last_name']) ? $message['chat']['last_name'] : "";
+	$username = isset($message['chat']['username']) ? $message['chat']['username'] : "";
+	$date = isset($message['date']) ? $message['date'] : "";
+	$text = isset($message['text']) ? $message['text'] : "";
+
+	$text = trim($text);
+	$text = strtolower($text);
+
+	$firstArrayKeyWord = ["dove","andiamo","cosa","si"];
+	$secondArrayKeyWord = ["mangiamo","mangiare","mangia","mangio"];
+	$lunchPlace = Place::FromJSON(file_get_contents("lunchPlaces.json"));
+
+	if(CheckKeyWord(["set place:"], $text)){
+		$placeName = substr($text, 10);
+		$placeName = trim($placeName);
+		if($placeName!=""){
+			$lunchPlace[] = new Place($placeName, true, true, true, true, true, true, true);
+			UpdatePlaces($lunchPlace);
+			PrintJsonMessage("New place:'".$placeName."' saved", $chatId);
+		}else{
+			PrintJsonMessage("Place name missed", $chatId);
+		}
+	}elseif(CheckKeyWord(["get places"], $text)){
+		$message = "";
+		foreach($lunchPlace as $k=>$p){ $message .= "[".$k."] ".$p->Name." \n"; }
+		PrintJsonMessage($message, $chatId);
+	}elseif(CheckKeyWord(["delete place:"], $text)){
+		$placeId = substr($text, 13);
+		$placeId = trim($placeId);
+		if($placeId=="first"){
+			DeletePlaceAtIndex($lunchPlace, 0);
+		}else{
+			$placeId = intval(trim($placeId));
+			if($placeId>0){
+				DeletePlaceAtIndex($lunchPlace, $placeId);
+			}
+		}
+	}elseif(CheckKeyWord($firstArrayKeyWord, $text) && CheckKeyWord($secondArrayKeyWord, $text)){
+		$place = Place::GetRandomPlace($lunchPlace);
+		PrintJsonMessage($place->Name, $chatId);
+	}
+
+}catch(Exception $ex){
+	file_put_contents("error.txtx",$ex->getMessage()." \n",FILE_APPEND);
 }
+
+
 
 function CheckKeyWord($keywords, $text){
 	foreach($keywords as $word){
@@ -50,6 +68,22 @@ function CheckKeyWord($keywords, $text){
 		}
 	}
 	return false;
+}
+
+function UpdatePlaces($lunchPlace){
+	$json = json_encode($lunchPlace);
+	file_put_contents("lunchPlaces.json",$json);
+}
+
+function DeletePlaceAtIndex($lunchPlace, $index){
+	if(isset($lunchPlace[$index])){
+		$place = $lunchPlace[$index];
+		PrintJsonMessage("'".$place->Name."' deleted", $chatId);
+		unset($lunchPlace[$index]);
+		UpdatePlaces($lunchPlace);
+	}else{
+		PrintJsonMessage("Place at index ".$index." not exist", $chatId);
+	}
 }
 
 function PrintJsonMessage($message, $chatId){
