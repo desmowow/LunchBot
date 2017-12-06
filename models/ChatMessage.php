@@ -3,10 +3,10 @@
  * Created by PhpStorm.
  * User: viola
  * Date: 06-Dec-17
- * Time: 15:19
+ * Time: 17:38
  */
 
-namespace LunchBot;
+namespace app\models;
 
 
 class ChatMessage
@@ -35,13 +35,14 @@ class ChatMessage
     }
 
     /**
-     * @param string $message
+     * @param $message
+     * @return array
      */
     function PrintJsonMessage($message){
-        header("Content-Type: application/json");
-        $parameters = array('chat_id' => $this->chatId, "text" => $message);
-        $parameters["method"] = "sendMessage";
-        echo json_encode($parameters);
+        return [
+            "chat_id" => $this->chatId,
+            "text" => $message,
+            "method" => "sendMessage"
+        ];
     }
-
 }
