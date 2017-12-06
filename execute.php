@@ -1,5 +1,7 @@
 <?php
 namespace LunchBot;
+use Exception;
+
 
 try{
 

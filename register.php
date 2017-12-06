@@ -1,7 +1,7 @@
 <?php
 
 // PARAMETRI DA MODIFICARE
-$WEBHOOK_URL = 'https://euris-lunch-bot.herokuapp.com/execute.php';
+$WEBHOOK_URL = 'https://www.violafrancesco.it/LunchBot/execute.php';
 $BOT_TOKEN = '481136551:AAFcBZMN8xT0-W_eE-D84BMTN_K-FKximOk';
 
 // NON APPORTARE MODIFICHE NEL CODICE SEGUENTE
