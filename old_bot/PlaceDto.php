@@ -12,6 +12,7 @@ namespace LunchBot;
 class PlaceDto
 {
     public $Name;
+    public $Description;
     public $Monday;
     public $Tuesday;
     public $Wednesday;
@@ -19,6 +20,8 @@ class PlaceDto
     public $Friday;
     public $Saturday;
     public $Sunday;
+    public $user;
+    public $timestamp;
 
     public function __construct($Name, $Monday, $Tuesday, $Wednesday, $Thursday, $Friday, $Saturday, $Sunday) {
         $this->Name = $Name;
