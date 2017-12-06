@@ -57,9 +57,7 @@ try{
 		$place = Place::GetRandomPlace($lunchPlace);
 		PrintJsonMessage($place->Name, $chatId);
 	}
-	
-	throw new Exception("non lo so veiamo cosa succede");
-
+		
 }catch(Exception $ex){
 	file_put_contents("last_error.txt",$ex->getMessage());
 	file_put_contents("error.txt",$ex->getMessage()." \n",FILE_APPEND);
