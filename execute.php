@@ -25,7 +25,7 @@ try{
 	$secondArrayKeyWord = ["mangiamo","mangiare","mangia","mangio"];
 	$lunchPlace = Place::FromJSON(file_get_contents("lunchPlaces.json"));
 
-	if(CheckKeyWord(["set place:"], $text)){
+	if(CheckKeyWord(["set place:","add place:"], $text)){
 		$placeName = substr($text, 10);
 		$placeName = trim($placeName);
 		if($placeName!=""){
@@ -50,13 +50,19 @@ try{
 				DeletePlaceAtIndex($lunchPlace, $placeId, $chatId);
 			}
 		}
+	}elseif($text=="get last error" || $text=="get error"){
+		$error = file_get_contents("last_error.txt");
+		PrintJsonMessage($error, $chatId);
 	}elseif(CheckKeyWord($firstArrayKeyWord, $text) && CheckKeyWord($secondArrayKeyWord, $text)){
 		$place = Place::GetRandomPlace($lunchPlace);
 		PrintJsonMessage($place->Name, $chatId);
 	}
+	
+	throw new Exception("non lo so veiamo cosa succede");
 
 }catch(Exception $ex){
-	file_put_contents("error.txtx",$ex->getMessage()." \n",FILE_APPEND);
+	file_put_contents("last_error.txt",$ex->getMessage());
+	file_put_contents("error.txt",$ex->getMessage()." \n",FILE_APPEND);
 }
 
 
