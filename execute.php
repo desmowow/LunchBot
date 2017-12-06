@@ -34,9 +34,11 @@ if(CheckKeyWord(["set place:"], $text)){
 	}else{
 		PrintJsonMessage("Place name missed", $chatId);
 	}
-}
-
-if(CheckKeyWord($firstArrayKeyWord, $text) && CheckKeyWord($secondArrayKeyWord, $text)){
+}elseif(CheckKeyWord(["get places"], $text)){
+	$message = "";
+	foreach($lunchPlace as $k=>$p){ $message .= "[".$k."] ".$p->Name." \n"; }
+	PrintJsonMessage($message, $chatId);
+}elseif(CheckKeyWord($firstArrayKeyWord, $text) && CheckKeyWord($secondArrayKeyWord, $text)){
 	$place = Place::GetRandomPlace($lunchPlace);
 	PrintJsonMessage($place->Name, $chatId);
 }
@@ -115,7 +117,7 @@ class Place{
 		$array_obj = json_decode($json);
 		$result = [];
 		foreach($array_obj as $obj){
-			$result[] = NewFromMixed($obj);
+			$result[] = Place::NewFromMixed($obj);
 		}
 		return $result;
 	}
