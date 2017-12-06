@@ -1,6 +1,14 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $content = file_get_contents("php://input");
 $update = json_decode($content, true);
+
+$firstArrayKeyWord = ["dove","andiamo","cosa","si"];
+$secondArrayKeyWord = ["mangiamo","mangiare","mangia","mangio"];
+$lunchPlace = Place::FromJSON(file_get_contents("lunchPlace.txt"));
 
 if(!$update)
 {
@@ -18,12 +26,6 @@ $text = isset($message['text']) ? $message['text'] : "";
 
 $text = trim($text);
 $text = strtolower($text);
-
-
-$firstArrayKeyWord = ["dove","andiamo","cosa","si"];
-$secondArrayKeyWord = ["mangiamo","mangiare","mangia","mangio"];
-$lunchPlace = Place::FromJSON(file_get_contents("lunchPlace.txt"));
-
 
 if(CheckKeyWord($firstArrayKeyWord, $text) && CheckKeyWord($secondArrayKeyWord, $text)){
 	$place = Place::GetRandomPlace($lunchPlace);
