@@ -43,11 +43,11 @@ try{
 		$placeId = substr($text, 13);
 		$placeId = trim($placeId);
 		if($placeId=="first"){
-			DeletePlaceAtIndex($lunchPlace, 0);
+			DeletePlaceAtIndex($lunchPlace, 0, $chatId);
 		}else{
 			$placeId = intval(trim($placeId));
 			if($placeId>0){
-				DeletePlaceAtIndex($lunchPlace, $placeId);
+				DeletePlaceAtIndex($lunchPlace, $placeId, $chatId);
 			}
 		}
 	}elseif(CheckKeyWord($firstArrayKeyWord, $text) && CheckKeyWord($secondArrayKeyWord, $text)){
@@ -75,7 +75,7 @@ function UpdatePlaces($lunchPlace){
 	file_put_contents("lunchPlaces.json",$json);
 }
 
-function DeletePlaceAtIndex($lunchPlace, $index){
+function DeletePlaceAtIndex($lunchPlace, $index, $chatId){
 	if(isset($lunchPlace[$index])){
 		$place = $lunchPlace[$index];
 		PrintJsonMessage("'".$place->Name."' deleted", $chatId);
