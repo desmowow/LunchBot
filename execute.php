@@ -23,6 +23,19 @@ $firstArrayKeyWord = ["dove","andiamo","cosa","si"];
 $secondArrayKeyWord = ["mangiamo","mangiare","mangia","mangio"];
 $lunchPlace = Place::FromJSON(file_get_contents("lunchPlaces.json"));
 
+if(CheckKeyWord(["set place:"], $text)){
+	$placeName = substr($text, 10);
+	$placeName = trim($placeName);
+	if($placeName!=""){
+		$lunchPlace[] = new Place($placeName, true, true, true, true, true, true, true);
+		$json = json_encode($lunchPlace);
+		file_put_contents("lunchPlaces.json",$json);
+		PrintJsonMessage("New place:'".$placeName."' saved", $chatId);
+	}else{
+		PrintJsonMessage("Place name missed", $chatId);
+	}
+}
+
 if(CheckKeyWord($firstArrayKeyWord, $text) && CheckKeyWord($secondArrayKeyWord, $text)){
 	$place = Place::GetRandomPlace($lunchPlace);
 	PrintJsonMessage($place->Name, $chatId);
@@ -54,15 +67,19 @@ class Place{
 	public $Saturday;
 	public $Sunday;
 	
-	public function __construct($mixed) {
-        $this->Name = $mixed->Name;
-        $this->Monday = $mixed->Monday;
-        $this->Tuesday = $mixed->Tuesday;
-        $this->Wednesday = $mixed->Wednesday;
-        $this->Thursday = $mixed->Thursday;
-        $this->Friday = $mixed->Friday;
-        $this->Saturday = $mixed->Saturday;
-        $this->Sunday = $mixed->Sunday;
+	public function __construct($Name, $Monday, $Tuesday, $Wednesday, $Thursday, $Friday, $Saturday, $Sunday) {
+        $this->Name = $Name;
+        $this->Monday = $Monday;
+        $this->Tuesday = $Tuesday;
+        $this->Wednesday = $Wednesday;
+        $this->Thursday = $Thursday;
+        $this->Friday = $Friday;
+        $this->Saturday = $Saturday;
+        $this->Sunday = $Sunday;
+    }
+	
+	public static function NewFromMixed($mixed) {
+		return new self($mixed->Name, $mixed->Monday, $mixed->Tuesday, $mixed->Wednesday, $mixed->Thursday, $mixed->Friday, $mixed->Saturday, $mixed->Sunday);
     }
 	
 	public function IsEnabledDay($day){
@@ -98,7 +115,7 @@ class Place{
 		$array_obj = json_decode($json);
 		$result = [];
 		foreach($array_obj as $obj){
-			$result[] = new self($obj);
+			$result[] = NewFromMixed($obj);
 		}
 		return $result;
 	}
