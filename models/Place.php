@@ -18,6 +18,8 @@ use Yii;
  * @property boolean $Saturday
  * @property boolean $Sunday
  * @property string $user
+ * @property string $first_name
+ * @property string $last_name
  * @property string $timestamp
  */
 class Place extends \yii\db\ActiveRecord
@@ -40,7 +42,7 @@ class Place extends \yii\db\ActiveRecord
             [['Name', 'Description'], 'string'],
             [['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], 'boolean'],
             [['timestamp'], 'safe'],
-            [['user'], 'string', 'max' => 50],
+            [['user', 'first_name', 'last_name'], 'string', 'max' => 50],
         ];
     }
 
@@ -61,6 +63,8 @@ class Place extends \yii\db\ActiveRecord
             'Saturday' => Yii::t('app', 'Saturday'),
             'Sunday' => Yii::t('app', 'Sunday'),
             'user' => Yii::t('app', 'User'),
+            'first_name' => Yii::t('app', 'First Name'),
+            'last_name' => Yii::t('app', 'Last Name'),
             'timestamp' => Yii::t('app', 'Timestamp'),
         ];
     }
