@@ -38,8 +38,8 @@ class AddplaceCommand extends UserCommand
                 $place = new Place();
                 $place->Name = $text;
                 $place->user = $chat->username ?: "";
-                $place->first_name = $chat->first_name;
-                $place->last_name = $chat->last_name;
+                $place->first_name = $chat->first_name ?: "";
+                $place->last_name = $chat->last_name ?: "";
                 $place->save();
                 $text = "'" . $place->Name . "' was saved!";
             }

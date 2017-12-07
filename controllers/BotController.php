@@ -10,6 +10,7 @@ namespace app\controllers;
 
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Exception\TelegramLogException;
+use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\TelegramLog;
 use yii\base\Module;
@@ -53,38 +54,19 @@ class BotController extends Controller
     public function actionHook(){
         try {
             $this->telegram->addCommandsPaths($this->commands_path);
-            // Enable admin users
-            //$telegram->enableAdmins($admin_users);
-            // Enable MySQL
-            //$telegram->enableMySql($mysql_credentials);
-            // Logging (Error, Debug and Raw Updates)
             TelegramLog::initErrorLog(__DIR__ . "/../runtime/logs/{$this->bot_username}_error.log");
             TelegramLog::initDebugLog(__DIR__ . "/../runtime/logs/{$this->bot_username}_debug.log");
             TelegramLog::initUpdateLog(__DIR__ . "/../runtime/logs/{$this->bot_username}_update.log");
-            // If you are using a custom Monolog instance for logging, use this instead of the above
-            //Longman\TelegramBot\TelegramLog::initialize($your_external_monolog_instance);
-            // Set custom Upload and Download paths
             //$telegram->setDownloadPath(__DIR__ . '/Download');
             //$telegram->setUploadPath(__DIR__ . '/Upload');
             // Here you can set some command specific parameters
-            // e.g. Google geocode/timezone api key for /date command
             //$telegram->setCommandConfig('date', ['google_api_key' => 'your_google_api_key_here']);
-            // Botan.io integration
-            //$telegram->enableBotan('your_botan_token');
-            // Requests Limiter (tries to prevent reaching Telegram API limits)
             $this->telegram->enableLimiter();
-            // Handle telegram webhook request
             $this->telegram->handle();
         } catch (TelegramException $e) {
-            // Silence is golden!
-            //echo $e;
-            // Log telegram errors
             TelegramLog::error($e);
             Yii::error($e);
         } catch (TelegramLogException $e) {
-            // Silence is golden!
-            // Uncomment this to catch log initialisation errors
-            //echo $e;
         } catch (\Exception $e) {
         }
     }
