@@ -2,7 +2,9 @@
 
 return [
     'adminEmail' => 'admin@example.com',
-    'token'=>'481136551:AAFcBZMN8xT0-W_eE-D84BMTN_K-FKximOk',
+
+    'bot_api_key'=>'481136551:AAFcBZMN8xT0-W_eE-D84BMTN_K-FKximOk',
+    'bot_username'=>'euris_lunch_bot',
 
     'firstArrayKeyWord' => ["dove","andiamo","cosa","si"],
     'secondArrayKeyWord' => ["mangiamo","mangiare","mangia","mangio"],
