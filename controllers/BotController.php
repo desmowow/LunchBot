@@ -30,7 +30,7 @@ class BotController extends Controller
     }
 
     public function actionIndex(){
-
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $info = file_get_contents("https://api.telegram.org/bot".Yii::$app->params["token"]."/getwebhookinfo");
         return [
             "info"=>json_decode($info),
@@ -61,7 +61,6 @@ class BotController extends Controller
     public function actionSave($name){
         $place = new Place();
         $place->Name = $name;
-        $place->user = "";
         $place->save();
     }
 
