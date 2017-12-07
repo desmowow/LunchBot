@@ -8,10 +8,8 @@
 
 namespace app\controllers;
 
-
 use app\models\ChatMessage;
 use app\models\Place;
-use http\Exception;
 use yii\base\Module;
 use yii\db\Expression;
 use \yii\helpers\Url;
@@ -83,23 +81,23 @@ class BotController extends Controller
                 $place->first_name = $chat->firstname;
                 $place->last_name = $chat->lastname;
                 $place->save();
-                return $chat->PrintJsonMessage("New place:'".$place->Name."' saved");
+                return $chat->SendMessage("New place:'".$place->Name."' saved");
             }else{
-                return $chat->PrintJsonMessage("Place name missed");
+                return $chat->SendMessage("Place name missed");
             }
         }elseif($this->CheckKeyWord(Yii::$app->params["getKeyWord"], $chat->text)){
             $message = "";
             foreach($lunchPlace as $k=>$p){ $message .= "[".$p->id."] ".$p->Name." \n"; }
-            return $chat->PrintJsonMessage($message);
+            return $chat->SendMessage($message);
         }elseif($this->CheckKeyWord(Yii::$app->params["deleteKeyWord"], $chat->text)){
             $placeId = substr($chat->text, 13);
             $placeId = trim($placeId);
             Place::deleteAll(['id'=>$placeId]);
-            return $chat->PrintJsonMessage("Deleted");
+            return $chat->SendMessage("Deleted");
         }elseif($this->CheckKeyWord(Yii::$app->params["firstArrayKeyWord"], $chat->text) && $this->CheckKeyWord(Yii::$app->params["secondArrayKeyWord"], $chat->text)){
             /** @var Place $place */
             $place = Place::find()->orderBy(new Expression('rand()'))->one();
-            return $chat->PrintJsonMessage($place->Name);
+            return $chat->SendMessage($place->Name);
         }
     }
 

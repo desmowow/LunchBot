@@ -38,7 +38,7 @@ class ChatMessage
      * @param $message
      * @return array
      */
-    function PrintJsonMessage($message){
+    function SendMessage($message){
         return [
             "chat_id" => $this->chatId,
             "text" => $message,
