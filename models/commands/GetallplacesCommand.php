@@ -31,7 +31,7 @@ class GetallplacesCommand extends UserCommand
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
         /** @var Place[] $places */
-        $places = Place::find()->all();
+        $places = Place::find()->orderBy("id")->all();
         $text = "";
         foreach($places as $place){ $text .= "[".$place->id."] ".$place->Name." \n"; }
 
