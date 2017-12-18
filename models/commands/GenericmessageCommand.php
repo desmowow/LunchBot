@@ -3,10 +3,8 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Longman\TelegramBot\Commands\SystemCommand;
-use Longman\TelegramBot\Commands\UserCommands\RandomChoice;
 use Longman\TelegramBot\Commands\UserCommands\RandomCommand;
 use Longman\TelegramBot\Entities\Update;
-use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 
 class GenericmessageCommand extends SystemCommand
